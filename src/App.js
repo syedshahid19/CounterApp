@@ -4,6 +4,7 @@ import io from "socket.io-client";
 import "./App.css"
 
 const socket = io("http://localhost:3000"); 
+const BASE_URL = "https://counterapp-backend.onrender.com";
 
 function App() {
   const [counters, setCounters] = useState([]);
@@ -26,29 +27,29 @@ function App() {
   }, [counters]);
 
   const fetchCounters = async () => {
-    const response = await axios.get("http://localhost:4000/api/v1/getAllCounters");
+    const response = await axios.get(BASE_URL+"/api/v1/getAllCounters");
     setCounters(response.data);
   };
 
   const handleIncrement = async (id) => {
     console.log(id)
-    await axios.put(`http://localhost:4000/api/v1/counterIncrement/${id}`);
+    await axios.put(BASE_URL+`/api/v1/counterIncrement/${id}`);
     socket.emit("increment", id);
   };
 
   const handleDecrement = async (id) => {
-    await axios.put(`http://localhost:4000/api/v1/counterDecrement/${id}`);
+    await axios.put(BASE_URL+`/api/v1/counterDecrement/${id}`);
     socket.emit("decrement", id);
   };
 
   const handleRemove = async (id) => {
-    await axios.delete(`http://localhost:4000/api/v1/deleteCounter/${id}`);
+    await axios.delete(BASE_URL+`/api/v1/deleteCounter/${id}`);
     socket.emit("remove", id);
   };
 
   const handleAddCounter = async () => {
     if (newCounterName) {
-      await axios.post("http://localhost:4000/api/v1/Createcounters", {
+      await axios.post(BASE_URL+"/api/v1/Createcounters", {
         name: newCounterName,
         value: 0,
       });
